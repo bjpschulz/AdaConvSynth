@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from typing import List, Tuple
 import random
 
-from src.networks.cdl_fista import CDLFISTA2D        # BEWARE
+from src.networks.cdl_fista import CDLFISTA2D
 from src.networks.unet import UNet
 from src.operators.mr_ops import MRIOperator
 from src.data_gen.lowfield_dataset import LowfieldMRIData
@@ -38,20 +38,17 @@ class TrainConfig:
     weight_decay_unet: float = 1e-5
     
     # Data
-    n_train_images: int = 2    # 4875
-    n_val_images: int = 2      # 1393
+    n_train_images: int = 4875    # 4875 is the full training set size, reduce for quick tests
+    n_val_images: int = 1393      # 1393 is the full validation set size, reduce for quick tests
 
     # Multi-dictionary setup
-    # train_dicts_path: str = "data/training/16_32_64"
     train_dicts_path: str = "data/training/dictionary_filters"
-    # val_dicts_path: str = "data/validation/16_32_64"
     val_dicts_path: str = "data/validation/dictionary_filters"
-    use_multi_dict: bool = True  # Set to False for single-dict training
     
     # Model architecture
-    n_iterations: int = 64     # 64        # <-- reduced from 64 to 2 to reduce memory footprint, for quick test
+    n_iterations: int = 64     # 64 unrolled fista iters, reduce for quick test
     lambda_mode: str = "lambda_cnn_map"
-    version: str = "version3"               # must be 2-1 channel unet
+    version: str = "version3"
     reg_parameter_bounds: tuple = (0.0, 10.0)
     freeze_dictionary: bool = True
     
@@ -67,12 +64,12 @@ class TrainConfig:
     
     # W&B logging
     use_wandb: bool = True
-    wandb_entity: str = "joshua-schulz-physikalisch-technische-bundesanstalt"
-    wandb_project: str = "UNet-v1-reproduced"
+    wandb_entity: str = "your_wandb_entity"  # <-- replace with your W&B entity
+    wandb_project: str = "your_wandb_project"  # <-- replace with your W&B project name
 
     # Checkpointing
     checkpoint_every: int = 1  # Save every N epochs
-    checkpoint_dir: str = "output/checkpoints/16_32_64/checkpoints"
+    checkpoint_dir: str = "output/training_checkpoints/epochs"
 
 
 def build_model(config: TrainConfig, dict_config: DictConfig, device):
@@ -243,9 +240,7 @@ def setup_wandb(config: TrainConfig, n_dicts: int = None):
         "unet_kernel_size": str(config.kernel_size),
         "res_connection": config.res_connection,
     }
-    if config.use_multi_dict and n_dicts:
-        wandb_config["n_dictionaries"] = n_dicts
-        
+
     run = wandb.init(
         entity=config.wandb_entity,
         project=config.wandb_project,
