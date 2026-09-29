@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.utils.data import Dataset
+from pathlib import Path
 
 from ..operators.mr_ops import MRIOperator
 from ..utils.noise_funcs import add_gaussian_noise
@@ -31,7 +32,7 @@ class LowfieldMRIData(Dataset):
         factor=10,
     ):
 
-        fname = path + "xtrue.pt"
+        fname = Path(path) / "xtrue.pt"
 
         self.im_shape = im_shape
         self.xtrue = torch.load(fname)[:n_images, ...]
