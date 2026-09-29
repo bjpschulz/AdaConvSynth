@@ -1,4 +1,4 @@
-# Multi-dictionary training environment
+# Installation & environment setup
 
 This repository can be run in a small `uv` environment. Two setup paths are documented below:
 
