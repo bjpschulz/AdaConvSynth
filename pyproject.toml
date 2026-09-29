@@ -1,0 +1,22 @@
+[project]
+name = "multi-dict-training"
+version = "0.1.0"
+description = "Multi-dictionary CDL-FISTA training"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "torch==2.14.0+cu126",
+    "torchvision==0.29.0+cu126",
+    "wandb>=0.30.0",
+    "einops>=0.8",
+    "matplotlib>=3.10",
+    "numpy>=2.0",
+]
+
+[[tool.uv.index]]
+name = "pytorch-cu126"
+url = "https://download.pytorch.org/whl/cu126"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu126" }
+torchvision = { index = "pytorch-cu126" }
