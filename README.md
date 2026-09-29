@@ -50,6 +50,7 @@ explicit = true
 [tool.uv.sources]
 torch = { index = "pytorch-cu126" }
 torchvision = { index = "pytorch-cu126" }
+mrpro = { path = "../mrpro", editable = true }
 ```
 
 Then resolve and install the environment:
