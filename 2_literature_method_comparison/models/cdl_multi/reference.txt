@@ -1,0 +1,1 @@
+The training script for this model lies at the top level of the repo.
